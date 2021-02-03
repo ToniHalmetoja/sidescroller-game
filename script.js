@@ -2,10 +2,20 @@
 const gameArea = document.getElementById("gameArea");
 const ctx = gameArea.getContext("2d");
 
-hero = new component("black", 10, 30, 30, 120);
-hero.update();
-
+var hero = new component("black", 10, 30, 30, 120);
+var obstacle = new component("black", 5, 20, 200, 130); 
 document.addEventListener("keydown", movement);
+
+var updater = setInterval(updateGameArea,20);
+
+function updateGameArea() {
+    ctx.clearRect(0, 0, gameArea.width, gameArea.height);
+    obstacle.x -= 1;
+    console.log(obstacle.x);
+    obstacle.update();
+    hero.update();
+    
+}
 
 function component(color, width, height, x, y) {
     this.width = width;
@@ -14,7 +24,6 @@ function component(color, width, height, x, y) {
     this.y = y;    
     this.update = function() {
         ctx.fillStyle = color;
-        ctx.clearRect(0, 0, gameArea.width, gameArea.height);
         ctx.fillRect(x, y, width, height);
     }
     this.move = function() {
@@ -48,21 +57,3 @@ function movement(evt){
             hero.move();    
     }
 }
-
-
-
-// function jump(){
-//         let oneJump = 0;
-//         if(height < 20 && height != 0){
-//             if(oneJump = 1){
-//                 clearInterval(jumpAnim);
-//             }
-//             height+=2;
-//             player.style.top = (370-height)+"px";
-//         }
-//         else if(height == 0){
-//             oneJump = 1;
-//             height-=2;
-//             player.style.top = (370-height)+"px";
-//         }
-// }
