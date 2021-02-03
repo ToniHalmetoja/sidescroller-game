@@ -1,50 +1,54 @@
 
-var gameArea = document.getElementById("gameArea");
-var player = document.createElement("div");
-var height = 0;
-player.id = "character";
-gameArea.append(player);
+const gameArea = document.getElementById("gameArea");
+const ctx = gameArea.getContext("2d");
 
-var spawnEnemies = setInterval(mainGame, 2000);
+hero = new component("black", 10, 30, 30, 120);
+hero.update();
 
+document.addEventListener("keydown", movement);
 
-function mainGame(){
-    var obstacle = document.createElement("div");
-    obstacle.id = "obstacle";
-    gameArea.append(obstacle);
+function component(color, width, height, x, y) {
+    this.width = width;
+    this.height = height;
+    this.x = x;
+    this.y = y;    
+    this.update = function() {
+        ctx.fillStyle = color;
+        ctx.clearRect(0, 0, gameArea.width, gameArea.height);
+        ctx.fillRect(x, y, width, height);
+    }
+    this.move = function() {
+        if(y==120){
+            let goingDown = false;
+            let jump = setInterval(function(){
+                if(y>=75 && goingDown == false){
+                    y-=5;
+                    hero.update();
+                    if(y==75){
+                        goingDown=true;
+                    }
+                }
 
-    var scrollAnim = setInterval(frame, 5);
-        let pos = 80;
-        let size = Math.random();
-        if(size>0.7){
-            obstacle.style.height = 80 + "px";
-            obstacle.style.top = 350 + "px"
-        }
-        else if(size<0.3){
-            obstacle.style.height = 15 + "px";
-            obstacle.style.top = 410 + "px"
-        }
-        function frame() {
-        if (pos == 1870) {
-            obstacle.remove();
-        } else {
-            pos+=5;
-            obstacle.style.right = pos + 'px';
+                else if(y<=120 && goingDown==true){
+                    y+=5;
+                    hero.update();
+
+                }            
+                
+                if(y==120 && goingDown==true){
+                    clearInterval(jump);
+                }
+            },25);
         }
     }
 }
 
-document.addEventListener("keydown", function(evt){
-    if (evt.key == "1") {
-        let jumpAnim = setInterval(function(){
-                player.style.top = (340)+"px";
-                console.log("beep");
-                player.style.top = (370)+"px";
-
-        },10);
+function movement(evt){
+    if(evt.key=="1") {
+            hero.move();    
     }
-        
-});
+}
+
 
 
 // function jump(){
