@@ -1,6 +1,7 @@
 
 var gameArea = document.getElementById("gameArea");
 var player = document.createElement("div");
+var height = 0;
 player.id = "character";
 gameArea.append(player);
 
@@ -34,18 +35,30 @@ function mainGame(){
 }
 
 document.addEventListener("keydown", function(evt){
-    if (evt.key == "1") {;
-        jump();
+    if (evt.key == "1") {
+        let jumpAnim = setInterval(function(){
+                player.style.top = (340)+"px";
+                console.log("beep");
+                player.style.top = (370)+"px";
+
+        },10);
     }
+        
 });
 
-function jump(){
-    // player.style.top = 320+"px";
-    //  if(current = "370px"){
-    console.log("beep");
-         for(i=0; i>89; i+=5){
-             player.style.top = (370-i)+"px";
-             console.log(player.style.top);
-         }
-    //  }
-}
+
+// function jump(){
+//         let oneJump = 0;
+//         if(height < 20 && height != 0){
+//             if(oneJump = 1){
+//                 clearInterval(jumpAnim);
+//             }
+//             height+=2;
+//             player.style.top = (370-height)+"px";
+//         }
+//         else if(height == 0){
+//             oneJump = 1;
+//             height-=2;
+//             player.style.top = (370-height)+"px";
+//         }
+// }
