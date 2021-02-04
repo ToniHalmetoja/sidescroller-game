@@ -9,10 +9,13 @@ var score = 0;
 var hero = new component(20, 60, 30, 340);
 var obstacles = [];
 var frameNo = 0;
+var jump;
+var updater;
 
 document.addEventListener("keydown", movement);
+ctx.fillText("Get ready...", 450, 150);
 
-var updater = setInterval(updateGameArea, 20);
+var running = false;
 
 function component(width, height, x, y) {
     this.width = width;
@@ -28,6 +31,12 @@ function everyInterval(n) {
     return false;
 }
 
+function restart(){
+    ctx.clearRect(0, 0, gameArea.width, gameArea.height);
+    score = 0;
+    updater = setInterval(updateGameArea, 20);
+}
+
 function updateGameArea() {
     ctx.clearRect(0, 0, gameArea.width, gameArea.height);
 
@@ -40,7 +49,9 @@ function updateGameArea() {
                 updateObstacles(i);
             }
             ctx.fillText("You lose. Final score: " + score, 350, 150);
+            clearInterval(jump);
             clearInterval(updater);
+            running = false;
             return;
         }
     }
@@ -57,7 +68,7 @@ function updateGameArea() {
         obstacles.push(new component(randomW, randomH, 1200, 380 - Math.floor(randomH / 2)));
     }
 
-    if (obstacles.length > 5) {
+    if (obstacles.length > 3) {
         obstacles.shift();
         score++;
     }
@@ -88,7 +99,6 @@ function crash(other) {
 }
 
 function updateHero(color) {
-    console.log(color);
     ctx.fillStyle = color;
     ctx.fillRect(hero.x, hero.y, hero.width, hero.height);
 }
@@ -120,7 +130,11 @@ function move() {
 
 
 function movement(evt) {
-    if (evt.key == " ") {
+    if(evt.key == " " && running == false){
+        running = true;
+        restart();
+    }
+    else if (evt.key == " " &&  running == true) {
         move();
     }
 }
