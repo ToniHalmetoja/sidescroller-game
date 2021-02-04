@@ -5,7 +5,7 @@ const ctx = gameArea.getContext("2d");
 ctx.font = "40px Verdana";
 var score = 0;
 
-var hero = new component(5, 30, 30, 370);
+var hero = new component(20, 60, 30, 340);
 var obstacles = [];
 
 var frameNo = 0;
@@ -51,9 +51,9 @@ function updateGameArea() {
     if (frameNo == 1 || everyInterval(50)) {
         x = gameArea.width;
         y = gameArea.height - 200
-        let randomH = Math.floor(Math.random() * 5) + 40;
-        let randomW = Math.floor(Math.random() * 3) + 5;
-        obstacles.push(new component(randomW, randomH, 1200, 360));
+        let randomH = Math.floor(Math.random() * 100) + 40;
+        let randomW = Math.floor(Math.random() * 20) + 5;
+        obstacles.push(new component(randomW, randomH, 1200, 370-randomH/2));
     }
 
         if(obstacles.length > 5){
@@ -99,19 +99,19 @@ function updateObstacles(i) {
 }
 
 function move () {
-    if (hero.y == 370) {
+    if (hero.y == 340) {
         let goingDown = false;
         let jump = setInterval(function () {
-            if (hero.y >= 300 && goingDown == false) {
-                hero.y -= 5;
-                if (hero.y == 300) {
+            if (hero.y >= 200 && goingDown == false) {
+                hero.y -= 10;
+                if (hero.y == 200) {
                     goingDown = true;
                 }
-            } else if (hero.y <= 370 && goingDown == true) {
-                hero.y += 5;
+            } else if (hero.y <= 340 && goingDown == true) {
+                hero.y += 10;
             }
 
-            if (hero.y == 370 && goingDown == true) {
+            if (hero.y == 340 && goingDown == true) {
                 clearInterval(jump);
             }
         }, 25);
