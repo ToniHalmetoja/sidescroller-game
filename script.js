@@ -1,16 +1,25 @@
 const gameArea = document.getElementById("gameArea");
+gameArea.width = 1200;
+gameArea.height = 400;
 const ctx = gameArea.getContext("2d");
+ctx.font = "40px Verdana";
+var score = 0;
 
-var hero = new component("black", 7, 30, 30, 120);
+var hero = new component(5, 30, 30, 370);
 var obstacles = [];
-
-
 
 var frameNo = 0;
 
 document.addEventListener("keydown", movement);
 
 var updater = setInterval(updateGameArea, 20);
+
+function component(width, height, x, y) {
+    this.width = width;
+    this.height = height;
+    this.x = x;
+    this.y = y;
+}
 
 function everyInterval(n) {
     if ((frameNo / n) % 1 == 0) {
@@ -20,57 +29,98 @@ function everyInterval(n) {
 }
 
 function updateGameArea() {
-    var x, y;
+    ctx.clearRect(0, 0, gameArea.width, gameArea.height);
 
+    for (i = 0; i < obstacles.length; i += 1) {
+        if (crash(obstacles[i])) {
+
+            updateHero("red");
+            for (i = 0; i < obstacles.length; i += 1) {
+                obstacles[i].x += -2;
+                updateObstacles(i);
+            }
+            ctx.fillText("You lose. Final score: " + score, 350, 150);
+            clearInterval(updater);
+            return;
+        }
+    }
+
+    var x, y;
     ctx.clearRect(0, 0, gameArea.width, gameArea.height);
     frameNo += 1;
     if (frameNo == 1 || everyInterval(50)) {
         x = gameArea.width;
         y = gameArea.height - 200
-        obstacles.push(new component("black", 5, 20, 300, 130));
-        console.log(obstacles);
+        let randomH = Math.floor(Math.random() * 5) + 40;
+        let randomW = Math.floor(Math.random() * 3) + 5;
+        obstacles.push(new component(randomW, randomH, 1200, 360));
     }
-    for (i = 0; i < obstacles.length; i += 1) {
-        obstacles[i].x += -2;
-        obstacles[i].update();
-    }
-    hero.update();
 
-}
-
-function component(color, width, height, x, y) {
-    this.width = width;
-    this.height = height;
-    this.x = x;
-    this.y = y;
-    this.update = function () {
-        ctx.fillStyle = color;
-        ctx.fillRect(this.x, this.y, this.width, this.height);
-    }
-    this.move = function () {
-        if (hero.y == 120) {
-            let goingDown = false;
-            let jump = setInterval(function () {
-                if (hero.y >= 75 && goingDown == false) {
-                    hero.y -= 5;
-                    hero.update();
-                    if (hero.y == 75) {
-                        goingDown = true;
-                    }
-                } else if (hero.y <= 120 && goingDown == true) {
-                    hero.y += 5;
-                }
-
-                if (hero.y == 120 && goingDown == true) {
-                    clearInterval(jump);
-                }
-            }, 25);
+        if(obstacles.length > 5){
+             obstacles.shift();
+             score++;
+         }
+        for (i = 0; i < obstacles.length; i += 1) {
+            obstacles[i].x += -5;
+            updateObstacles(i);
         }
+        ctx.fillText(score, 600, 150);
+        updateHero("black");
+
+
+}
+
+function crash(other) {
+    let heroLeft = hero.x;
+    let heroRight = hero.x + (hero.width);
+    let heroBottom = hero.y + (hero.height);
+    let obstacleLeft = other.x;
+    let obstacleRight = other.x + (other.width);
+    let obstacleTop = other.y;
+    let crash = true;
+    if ((heroBottom < obstacleTop) ||
+    (heroRight < obstacleLeft) ||
+    (heroLeft > obstacleRight)) {
+      crash = false;
+    }
+
+    return crash;
+}
+
+function updateHero(color) {
+    console.log(color);
+    ctx.fillStyle = color;
+    ctx.fillRect(hero.x, hero.y, hero.width, hero.height);
+}
+
+function updateObstacles(i) {
+    ctx.fillStyle = "black";
+    ctx.fillRect(obstacles[i].x, obstacles[i].y, obstacles[i].width, obstacles[i].height);
+}
+
+function move () {
+    if (hero.y == 370) {
+        let goingDown = false;
+        let jump = setInterval(function () {
+            if (hero.y >= 300 && goingDown == false) {
+                hero.y -= 5;
+                if (hero.y == 300) {
+                    goingDown = true;
+                }
+            } else if (hero.y <= 370 && goingDown == true) {
+                hero.y += 5;
+            }
+
+            if (hero.y == 370 && goingDown == true) {
+                clearInterval(jump);
+            }
+        }, 25);
     }
 }
+
 
 function movement(evt) {
     if (evt.key == "1") {
-        hero.move();
+        move();
     }
 }
