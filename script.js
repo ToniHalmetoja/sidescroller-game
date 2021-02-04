@@ -54,7 +54,7 @@ function updateGameArea() {
         y = gameArea.height - 200
         let randomH = Math.floor(Math.random() * 100) + 40;
         let randomW = Math.floor(Math.random() * 20) + 5;
-        obstacles.push(new component(randomW, randomH, 1200, 375 - randomH / 2));
+        obstacles.push(new component(randomW, randomH, 1200, 380 - Math.floor(randomH / 2)));
     }
 
     if (obstacles.length > 5) {
@@ -62,7 +62,7 @@ function updateGameArea() {
         score++;
     }
     for (i = 0; i < obstacles.length; i += 1) {
-        obstacles[i].x += -5;
+        obstacles[i].x += -10;
         updateObstacles(i);
     }
 
