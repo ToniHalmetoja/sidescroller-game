@@ -1,13 +1,13 @@
 const gameArea = document.getElementById("gameArea");
+const ctx = gameArea.getContext("2d");
+
 gameArea.width = 1200;
 gameArea.height = 400;
-const ctx = gameArea.getContext("2d");
 ctx.font = "40px Verdana";
-var score = 0;
 
+var score = 0;
 var hero = new component(20, 60, 30, 340);
 var obstacles = [];
-
 var frameNo = 0;
 
 document.addEventListener("keydown", movement);
@@ -48,26 +48,26 @@ function updateGameArea() {
     var x, y;
     ctx.clearRect(0, 0, gameArea.width, gameArea.height);
     frameNo += 1;
+    
     if (frameNo == 1 || everyInterval(50)) {
         x = gameArea.width;
         y = gameArea.height - 200
         let randomH = Math.floor(Math.random() * 100) + 40;
         let randomW = Math.floor(Math.random() * 20) + 5;
-        obstacles.push(new component(randomW, randomH, 1200, 370-randomH/2));
+        obstacles.push(new component(randomW, randomH, 1200, 370 - randomH / 2));
     }
 
-        if(obstacles.length > 5){
-             obstacles.shift();
-             score++;
-         }
-        for (i = 0; i < obstacles.length; i += 1) {
-            obstacles[i].x += -5;
-            updateObstacles(i);
-        }
-        ctx.fillText(score, 600, 150);
-        updateHero("black");
+    if (obstacles.length > 5) {
+        obstacles.shift();
+        score++;
+    }
+    for (i = 0; i < obstacles.length; i += 1) {
+        obstacles[i].x += -5;
+        updateObstacles(i);
+    }
 
-
+    ctx.fillText(score, 600, 150);
+    updateHero("black");
 }
 
 function crash(other) {
@@ -79,9 +79,9 @@ function crash(other) {
     let obstacleTop = other.y;
     let crash = true;
     if ((heroBottom < obstacleTop) ||
-    (heroRight < obstacleLeft) ||
-    (heroLeft > obstacleRight)) {
-      crash = false;
+        (heroRight < obstacleLeft) ||
+        (heroLeft > obstacleRight)) {
+        crash = false;
     }
 
     return crash;
@@ -98,7 +98,7 @@ function updateObstacles(i) {
     ctx.fillRect(obstacles[i].x, obstacles[i].y, obstacles[i].width, obstacles[i].height);
 }
 
-function move () {
+function move() {
     if (hero.y == 340) {
         let goingDown = false;
         let jump = setInterval(function () {
