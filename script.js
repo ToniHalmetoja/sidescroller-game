@@ -48,7 +48,7 @@ function updateGameArea() {
     var x, y;
     ctx.clearRect(0, 0, gameArea.width, gameArea.height);
     frameNo += 1;
-    
+
     if (frameNo == 1 || everyInterval(50)) {
         x = gameArea.width;
         y = gameArea.height - 200
@@ -120,7 +120,7 @@ function move() {
 
 
 function movement(evt) {
-    if (evt.key == "1") {
+    if (evt.key == " ") {
         move();
     }
 }
