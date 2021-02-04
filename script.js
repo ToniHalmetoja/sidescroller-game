@@ -131,6 +131,8 @@ function move() {
 
 function movement(evt) {
     if(evt.key == " " && running == false){
+        ctx.clearRect(0, 0, gameArea.width, gameArea.height);
+        obstacles = [];
         running = true;
         restart();
     }
